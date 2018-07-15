@@ -1,0 +1,5 @@
+:local .tRow button {
+  opacity: 0.9 !important; }
+
+:local .tRow:hover button {
+  opacity: 1 !important; }
