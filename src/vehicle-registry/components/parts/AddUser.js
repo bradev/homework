@@ -38,8 +38,24 @@ export class AddUser extends React.PureComponent {
     this.setState({ errors });
 
     if (Object.keys(errors).length === 0) {
-      this.setState({ loading: true });
-      this.props.addUser(personData, vehicleId)
+
+      if (
+        !this.isTempUser(personData.roleCode) &&
+        personData.validFrom &&
+        personData.validTo
+      ) {
+        var pData = { ...personData };
+        pData.validFrom = "";
+        pData.validTo = "";
+        this.setState({
+          loading: true,
+          personData: { ...this.state.personData, ...pData }
+        });
+      } else {
+        this.setState({ loading: true });
+      }
+
+      this.props.addUser(pData || personData, vehicleId)
       .catch(err =>
         this.setState({
           ...this.state,
@@ -59,6 +75,7 @@ export class AddUser extends React.PureComponent {
       });
     }
   }
+
 
   isValidRole = roleCode => {
     const { hasOwner, hasResUser } = this.state;
